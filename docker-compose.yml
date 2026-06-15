@@ -1,0 +1,13 @@
+services:
+  ctf-cybersec-bot:
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:///./runtime/ctf_bot.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./runtime:/app/runtime
+      - ./data:/app/data:ro
+

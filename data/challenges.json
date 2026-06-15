@@ -1,0 +1,524 @@
+[
+  {
+    "id": "web-001-status-404",
+    "title": "HTTP Status Basics",
+    "category": "Web",
+    "difficulty": "beginner",
+    "prompt": "In a CTF training app, a request for /secret-notes returns HTTP 404. What does 404 usually mean?",
+    "answer": "not found",
+    "acceptable_answers": ["404", "not found", "resource not found", "the resource was not found"],
+    "hints": [
+      "HTTP status codes describe how the server handled the request.",
+      "The 4xx range usually means the client request could not be completed.",
+      "404 is the classic response when a path or resource does not exist."
+    ],
+    "explanation": "HTTP 404 means the requested resource was not found at that path.",
+    "points": 50,
+    "safety_note": "This challenge teaches protocol literacy using a toy route, not probing real systems."
+  },
+  {
+    "id": "web-002-parameterized-queries",
+    "title": "Safer Database Queries",
+    "category": "Web",
+    "difficulty": "beginner",
+    "prompt": "A developer changes string-built SQL into parameterized queries. What common web risk does this help prevent?",
+    "answer": "sql injection",
+    "acceptable_answers": ["sql injection", "injection", "sql injection attacks"],
+    "hints": [
+      "The fix separates query structure from user-controlled values.",
+      "The issue appears when user input is treated as part of a SQL command.",
+      "The risk is commonly abbreviated as SQLi."
+    ],
+    "explanation": "Parameterized queries bind user input as data, which helps prevent SQL injection.",
+    "points": 75,
+    "safety_note": "This is defensive secure-coding guidance, not exploitation guidance against real apps."
+  },
+  {
+    "id": "web-003-output-encoding",
+    "title": "Escaping User Content",
+    "category": "Web",
+    "difficulty": "beginner",
+    "prompt": "A toy comments page renders raw user input directly into HTML. What defensive control should be applied before displaying it?",
+    "answer": "output encoding",
+    "acceptable_answers": ["output encoding", "html escaping", "escape html", "context-aware encoding"],
+    "hints": [
+      "The problem happens when browser-interpreted characters are displayed as markup.",
+      "The defense turns special characters into safe representations.",
+      "For HTML, characters like < and > should not be rendered as tags."
+    ],
+    "explanation": "Output encoding, such as HTML escaping, prevents user-controlled text from being interpreted as active markup.",
+    "points": 75,
+    "safety_note": "The challenge focuses on safe rendering practices in a toy example."
+  },
+  {
+    "id": "web-004-jwt-algorithm",
+    "title": "JWT Trust Boundaries",
+    "category": "Web",
+    "difficulty": "intermediate",
+    "prompt": "A training note says: 'Never trust a token's header alone to decide whether a JWT is valid.' What is the safer design principle?",
+    "answer": "verify signatures with a server-side allowlist",
+    "acceptable_answers": [
+      "verify signatures",
+      "server-side algorithm allowlist",
+      "verify jwt signature",
+      "do not trust the jwt header",
+      "verify signatures with a server-side allowlist"
+    ],
+    "hints": [
+      "The server should decide what algorithms and keys are allowed.",
+      "A token header is user-controlled input.",
+      "Validation should include signature verification using trusted configuration."
+    ],
+    "explanation": "JWT validation should use trusted server-side configuration for allowed algorithms and keys, then verify the signature.",
+    "points": 100,
+    "safety_note": "This is conceptual defensive guidance about validation boundaries."
+  },
+  {
+    "id": "web-005-hardcoded-secret",
+    "title": "Hardcoded Secret Review",
+    "category": "Web",
+    "difficulty": "beginner",
+    "prompt": "A toy config file contains API_KEY = 'demo-secret-123'. What security issue should a reviewer flag?",
+    "answer": "hardcoded secret",
+    "acceptable_answers": ["hardcoded secret", "hardcoded api key", "secret in source code", "embedded secret"],
+    "hints": [
+      "Secrets should not live in source code.",
+      "Version control can preserve values even after deletion.",
+      "Use environment variables or a secret manager instead."
+    ],
+    "explanation": "Hardcoded secrets can leak through source control, logs, screenshots, or shared artifacts.",
+    "points": 60,
+    "safety_note": "This teaches secret hygiene without exposing real credentials."
+  },
+  {
+    "id": "web-006-csrf-token",
+    "title": "State-Changing Requests",
+    "category": "Web",
+    "difficulty": "intermediate",
+    "prompt": "A lab form changes an email address with a POST request but has no anti-CSRF token. What protection is missing?",
+    "answer": "csrf token",
+    "acceptable_answers": ["csrf token", "anti-csrf token", "cross-site request forgery token", "csrf protection"],
+    "hints": [
+      "The defense helps prove the request came from the intended form.",
+      "It is commonly used on state-changing browser requests.",
+      "The acronym starts with C and relates to forged cross-site requests."
+    ],
+    "explanation": "Anti-CSRF tokens help protect state-changing requests from cross-site request forgery.",
+    "points": 90,
+    "safety_note": "The prompt discusses a lab form and a defensive mitigation."
+  },
+  {
+    "id": "forensics-001-png-magic",
+    "title": "Magic Bytes",
+    "category": "Forensics",
+    "difficulty": "beginner",
+    "prompt": "A toy file starts with hex bytes 89 50 4E 47 0D 0A 1A 0A. What file type does this signature indicate?",
+    "answer": "png",
+    "acceptable_answers": ["png", "png image", "portable network graphics"],
+    "hints": [
+      "File signatures are also called magic bytes.",
+      "50 4E 47 is ASCII for PNG.",
+      "This image format commonly starts with 89 50 4E 47."
+    ],
+    "explanation": "The byte sequence is the standard PNG file signature.",
+    "points": 50,
+    "safety_note": "File signature identification is safe forensic fundamentals."
+  },
+  {
+    "id": "forensics-002-toy-log",
+    "title": "Toy Log Pattern",
+    "category": "Forensics",
+    "difficulty": "beginner",
+    "prompt": "A fake CTF log shows ten failed logins for user 'demo' followed by one success from the same lab IP. What pattern should a defender investigate?",
+    "answer": "repeated failed logins followed by success",
+    "acceptable_answers": [
+      "failed logins followed by success",
+      "brute force pattern",
+      "password guessing pattern",
+      "repeated failed logins followed by success"
+    ],
+    "hints": [
+      "Look at the sequence, not just a single event.",
+      "Repeated failures can indicate guessing attempts.",
+      "The success after many failures is the important pivot point."
+    ],
+    "explanation": "Repeated failed logins followed by a success can indicate password guessing or compromised credentials in a lab scenario.",
+    "points": 70,
+    "safety_note": "This uses fake logs for defensive pattern recognition."
+  },
+  {
+    "id": "forensics-003-exif",
+    "title": "Metadata Clue",
+    "category": "Forensics",
+    "difficulty": "beginner",
+    "prompt": "A CTF image description says the camera model and timestamp are stored inside the file metadata. What metadata family is commonly checked for photos?",
+    "answer": "exif",
+    "acceptable_answers": ["exif", "exif metadata", "image metadata"],
+    "hints": [
+      "Many photos include structured metadata.",
+      "It can contain camera, timestamp, and sometimes location fields.",
+      "The acronym is four letters and starts with E."
+    ],
+    "explanation": "EXIF metadata is commonly embedded in image files and may contain camera and timestamp information.",
+    "points": 60,
+    "safety_note": "This is safe metadata awareness for CTF images."
+  },
+  {
+    "id": "forensics-004-fake-pcap-summary",
+    "title": "PCAP Summary Reading",
+    "category": "Forensics",
+    "difficulty": "beginner",
+    "prompt": "A fake PCAP summary says: 'Client asks resolver for ctf.example.test A record.' What protocol is being summarized?",
+    "answer": "dns",
+    "acceptable_answers": ["dns", "domain name system", "dns query"],
+    "hints": [
+      "An A record maps a hostname to an IPv4 address.",
+      "Resolvers answer name lookups.",
+      "This protocol translates names into network addresses."
+    ],
+    "explanation": "The summary describes a DNS query for an A record.",
+    "points": 60,
+    "safety_note": "The traffic is fictional and used only for protocol learning."
+  },
+  {
+    "id": "forensics-005-hash-integrity",
+    "title": "Integrity Check",
+    "category": "Forensics",
+    "difficulty": "intermediate",
+    "prompt": "A downloaded lab artifact has a different SHA-256 hash than the published value. What does that suggest?",
+    "answer": "integrity mismatch",
+    "acceptable_answers": ["integrity mismatch", "file changed", "tampering possible", "hash mismatch", "corrupted file"],
+    "hints": [
+      "Hashes are often used to compare file contents.",
+      "A different hash means the bytes are not identical.",
+      "The cause could be corruption, replacement, or tampering."
+    ],
+    "explanation": "A hash mismatch means the file contents differ from the expected artifact and should not be trusted without investigation.",
+    "points": 80,
+    "safety_note": "This is defensive integrity verification."
+  },
+  {
+    "id": "crypto-001-caesar",
+    "title": "Caesar Shift",
+    "category": "Crypto Basics",
+    "difficulty": "beginner",
+    "prompt": "A toy Caesar cipher shifts letters by 1. Decode: gmbh{dbftbs}",
+    "answer": "flag{caesar}",
+    "acceptable_answers": ["flag{caesar}", "caesar"],
+    "hints": [
+      "Shift each letter one step backward in the alphabet.",
+      "g becomes f, m becomes l, and b becomes a.",
+      "The wrapper should become flag{...}."
+    ],
+    "explanation": "Shifting each letter back by one decodes gmbh{dbftbs} to flag{caesar}.",
+    "points": 50,
+    "safety_note": "Classical cipher puzzles are safe CTF learning exercises."
+  },
+  {
+    "id": "crypto-002-base64",
+    "title": "Base64 Basics",
+    "category": "Crypto Basics",
+    "difficulty": "beginner",
+    "prompt": "Decode this educational Base64 string: ZmxhZ3tiYXNlNjRfYmFzaWNzfQ==",
+    "answer": "flag{base64_basics}",
+    "acceptable_answers": ["flag{base64_basics}", "base64_basics"],
+    "hints": [
+      "Base64 is encoding, not encryption.",
+      "The == padding is a common clue.",
+      "Decoding should produce a flag-like string."
+    ],
+    "explanation": "The Base64 value decodes to flag{base64_basics}.",
+    "points": 50,
+    "safety_note": "Encoding and decoding toy strings is safe educational practice."
+  },
+  {
+    "id": "crypto-003-hash-vs-encryption",
+    "title": "One-Way Functions",
+    "category": "Crypto Basics",
+    "difficulty": "beginner",
+    "prompt": "Which concept is designed to be one-way: hashing or encryption?",
+    "answer": "hashing",
+    "acceptable_answers": ["hashing", "hash", "cryptographic hash"],
+    "hints": [
+      "Encryption is designed to be reversible with the right key.",
+      "A password storage system should not need to decrypt passwords.",
+      "The one-way primitive produces a digest."
+    ],
+    "explanation": "Hashing is designed to be one-way, while encryption is reversible with the correct key.",
+    "points": 60,
+    "safety_note": "This challenge teaches defensive cryptography vocabulary."
+  },
+  {
+    "id": "crypto-004-key-reuse",
+    "title": "Toy XOR Warning",
+    "category": "Crypto Basics",
+    "difficulty": "intermediate",
+    "prompt": "In a classroom XOR cipher demo, reusing the same secret stream for many messages is described as unsafe. What is the core issue?",
+    "answer": "key reuse",
+    "acceptable_answers": ["key reuse", "reusing the key", "keystream reuse", "same key reused"],
+    "hints": [
+      "The same secret material protects multiple messages.",
+      "Patterns can leak when reuse happens.",
+      "The phrase is two words: key ____."
+    ],
+    "explanation": "Reusing a key or keystream can reveal relationships between messages and break confidentiality.",
+    "points": 90,
+    "safety_note": "The prompt is conceptual and uses a classroom-only toy cipher."
+  },
+  {
+    "id": "crypto-005-rot13",
+    "title": "ROT13 Warmup",
+    "category": "Crypto Basics",
+    "difficulty": "beginner",
+    "prompt": "Decode this ROT13 text: synt{ebg13}",
+    "answer": "flag{rot13}",
+    "acceptable_answers": ["flag{rot13}", "rot13"],
+    "hints": [
+      "ROT13 shifts letters by 13 positions.",
+      "Applying ROT13 twice returns the original text.",
+      "synt becomes flag."
+    ],
+    "explanation": "ROT13 transforms synt{ebg13} into flag{rot13}.",
+    "points": 50,
+    "safety_note": "ROT13 puzzles are safe beginner CTF practice."
+  },
+  {
+    "id": "linux-001-permissions-644",
+    "title": "Permission Bits",
+    "category": "Linux",
+    "difficulty": "beginner",
+    "prompt": "A lab file has permissions 644. What can the owner do?",
+    "answer": "read and write",
+    "acceptable_answers": ["read and write", "read write", "rw", "owner can read and write"],
+    "hints": [
+      "The first digit applies to the owner.",
+      "4 means read and 2 means write.",
+      "6 is 4 plus 2."
+    ],
+    "explanation": "In 644, the owner has read and write permissions; group and others have read only.",
+    "points": 50,
+    "safety_note": "Linux permission interpretation is safe system administration knowledge."
+  },
+  {
+    "id": "linux-002-directory-listing",
+    "title": "List Hidden Files",
+    "category": "Linux",
+    "difficulty": "beginner",
+    "prompt": "In a local CTF folder, which common command option shows hidden files when listing directory contents?",
+    "answer": "-a",
+    "acceptable_answers": ["-a", "a", "ls -a", "--all"],
+    "hints": [
+      "Hidden files often start with a dot.",
+      "The option is commonly used with ls.",
+      "It is short for all."
+    ],
+    "explanation": "The ls -a option shows all entries, including hidden dotfiles.",
+    "points": 50,
+    "safety_note": "This is local filesystem navigation in a lab directory."
+  },
+  {
+    "id": "linux-003-grep",
+    "title": "Search Text",
+    "category": "Linux",
+    "difficulty": "beginner",
+    "prompt": "Which common Linux command searches text files for matching lines?",
+    "answer": "grep",
+    "acceptable_answers": ["grep"],
+    "hints": [
+      "It is often used with logs.",
+      "It prints lines matching a pattern.",
+      "The command name is four letters."
+    ],
+    "explanation": "grep searches text for lines that match a pattern.",
+    "points": 50,
+    "safety_note": "Text search is safe local analysis."
+  },
+  {
+    "id": "linux-004-least-privilege",
+    "title": "Least Privilege",
+    "category": "Linux",
+    "difficulty": "intermediate",
+    "prompt": "A service account in a lab only needs to read one folder, but it has full sudo access. What security principle is violated?",
+    "answer": "least privilege",
+    "acceptable_answers": ["least privilege", "principle of least privilege", "poLP"],
+    "hints": [
+      "Accounts should receive only the access they need.",
+      "Excess privileges increase blast radius.",
+      "The phrase is often abbreviated PoLP."
+    ],
+    "explanation": "The principle of least privilege says users and services should only have permissions required for their role.",
+    "points": 80,
+    "safety_note": "This is defensive access-control design."
+  },
+  {
+    "id": "network-001-https-port",
+    "title": "Common Service Port",
+    "category": "Networking",
+    "difficulty": "beginner",
+    "prompt": "What TCP port is commonly associated with HTTPS?",
+    "answer": "443",
+    "acceptable_answers": ["443", "tcp 443", "port 443"],
+    "hints": [
+      "HTTP commonly uses 80.",
+      "The encrypted web protocol commonly uses a three-digit port.",
+      "It is 443."
+    ],
+    "explanation": "HTTPS commonly uses TCP port 443.",
+    "points": 40,
+    "safety_note": "Recognizing common ports is safe networking literacy."
+  },
+  {
+    "id": "network-002-dns-a-record",
+    "title": "DNS A Record",
+    "category": "Networking",
+    "difficulty": "beginner",
+    "prompt": "In DNS, what does an A record map a hostname to?",
+    "answer": "ipv4 address",
+    "acceptable_answers": ["ipv4 address", "ip address", "an ipv4 address"],
+    "hints": [
+      "The A record is for address.",
+      "It is not the mail server record.",
+      "The classic A record returns an IPv4 address."
+    ],
+    "explanation": "A DNS A record maps a hostname to an IPv4 address.",
+    "points": 50,
+    "safety_note": "DNS record literacy is safe and broadly defensive."
+  },
+  {
+    "id": "network-003-three-way-handshake",
+    "title": "TCP Handshake",
+    "category": "Networking",
+    "difficulty": "beginner",
+    "prompt": "Name the three messages in the normal TCP three-way handshake.",
+    "answer": "syn syn-ack ack",
+    "acceptable_answers": ["syn syn-ack ack", "syn, syn-ack, ack", "syn syn ack ack", "syn synack ack"],
+    "hints": [
+      "The first message asks to synchronize.",
+      "The second acknowledges while synchronizing.",
+      "The third acknowledges the response."
+    ],
+    "explanation": "A normal TCP connection begins with SYN, SYN-ACK, then ACK.",
+    "points": 70,
+    "safety_note": "This is protocol theory, not traffic against real targets."
+  },
+  {
+    "id": "network-004-private-ip",
+    "title": "Private Address Space",
+    "category": "Networking",
+    "difficulty": "beginner",
+    "prompt": "In a lab diagram, 10.0.0.5 appears as a host address. Is this generally private or public address space?",
+    "answer": "private",
+    "acceptable_answers": ["private", "private ip", "private address", "rfc1918"],
+    "hints": [
+      "10.0.0.0/8 is reserved for internal networks.",
+      "Private ranges are not normally routed on the public internet.",
+      "The answer is private."
+    ],
+    "explanation": "10.0.0.0/8 is RFC1918 private address space.",
+    "points": 50,
+    "safety_note": "This teaches lab network addressing and avoids public target scanning."
+  },
+  {
+    "id": "osint-001-source-checking",
+    "title": "Source Reliability",
+    "category": "OSINT Basics",
+    "difficulty": "beginner",
+    "prompt": "A CTF clue appears on one unverified page. What should you do before trusting it?",
+    "answer": "cross-check sources",
+    "acceptable_answers": ["cross-check sources", "verify with multiple sources", "corroborate", "validate the source"],
+    "hints": [
+      "One source can be wrong or outdated.",
+      "Look for corroboration.",
+      "The answer is about checking multiple sources."
+    ],
+    "explanation": "OSINT findings should be corroborated with reliable, independent sources before being trusted.",
+    "points": 60,
+    "safety_note": "This is ethical research methodology, not targeting private people."
+  },
+  {
+    "id": "osint-002-image-metadata",
+    "title": "Image Clue Type",
+    "category": "OSINT Basics",
+    "difficulty": "beginner",
+    "prompt": "A public-domain CTF image may include camera timestamp fields. What kind of data are you checking?",
+    "answer": "metadata",
+    "acceptable_answers": ["metadata", "exif metadata", "image metadata"],
+    "hints": [
+      "It is data about the file rather than the visible pixels.",
+      "For photos, EXIF is a common example.",
+      "The broad term is metadata."
+    ],
+    "explanation": "Metadata is data about the file, such as timestamps or camera information.",
+    "points": 50,
+    "safety_note": "The example uses public-domain CTF material and avoids personal doxxing."
+  },
+  {
+    "id": "osint-003-domain-registration",
+    "title": "Domain Registration Clue",
+    "category": "OSINT Basics",
+    "difficulty": "intermediate",
+    "prompt": "A lab asks which record family can show public domain registration metadata such as registrar and dates.",
+    "answer": "whois",
+    "acceptable_answers": ["whois", "whois records", "domain registration records"],
+    "hints": [
+      "This lookup is about domain ownership and registration metadata.",
+      "Privacy services may redact many fields.",
+      "The common term starts with who."
+    ],
+    "explanation": "WHOIS records can provide public domain registration metadata, though many details may be private or redacted.",
+    "points": 70,
+    "safety_note": "This is limited to public registration metadata in a lab context."
+  },
+  {
+    "id": "secure-001-server-validation",
+    "title": "Trust Boundaries",
+    "category": "Secure Coding",
+    "difficulty": "beginner",
+    "prompt": "A form validates input only in JavaScript. What should be added on the backend?",
+    "answer": "server-side validation",
+    "acceptable_answers": ["server-side validation", "backend validation", "validate on the server"],
+    "hints": [
+      "Client-side checks can be changed by the user.",
+      "The backend is the trust boundary.",
+      "Validation should happen on the server too."
+    ],
+    "explanation": "Server-side validation is required because client-side controls can be bypassed or modified.",
+    "points": 70,
+    "safety_note": "This is defensive application design."
+  },
+  {
+    "id": "secure-002-dependency-updates",
+    "title": "Vulnerable Dependency",
+    "category": "Secure Coding",
+    "difficulty": "beginner",
+    "prompt": "A lab dependency scanner reports a known vulnerable package version. What is the usual remediation?",
+    "answer": "update the dependency",
+    "acceptable_answers": ["update the dependency", "upgrade the package", "patch the dependency", "upgrade to a fixed version"],
+    "hints": [
+      "The vulnerable version should not remain in use.",
+      "Look for a patched release.",
+      "The action is to update or upgrade."
+    ],
+    "explanation": "Known vulnerable dependencies should usually be upgraded to a fixed version after compatibility testing.",
+    "points": 60,
+    "safety_note": "This is safe dependency hygiene."
+  },
+  {
+    "id": "secure-003-secret-management",
+    "title": "Secret Storage",
+    "category": "Secure Coding",
+    "difficulty": "intermediate",
+    "prompt": "A developer wants to keep API tokens out of source code. What should they use for local configuration at minimum?",
+    "answer": "environment variables",
+    "acceptable_answers": ["environment variables", "env vars", "secret manager", "environment variables or a secret manager"],
+    "hints": [
+      "The value should be injected at runtime.",
+      "A managed secret store is even better in production.",
+      "For local development, .env files are common but should not be committed."
+    ],
+    "explanation": "Environment variables or a secret manager keep secrets out of source code and version control.",
+    "points": 70,
+    "safety_note": "This teaches safe handling of configuration secrets."
+  }
+]
+

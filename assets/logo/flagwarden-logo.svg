@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024"
+  viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">FlagWarden logo</title>
+  <desc id="desc">A square dark shield logo with a CTF flag and FW initials.</desc>
+  <rect width="1024" height="1024" rx="190" fill="#0f172a"/>
+  <circle cx="512" cy="512" r="390" fill="#13233f"/>
+  <path d="M512 150 790 268v217L512 842 234 485V268L512 150Z" fill="#14b8a6"/>
+  <path d="M512 226 714 312v168L512 744 310 480V312l202-86Z" fill="#0f172a"/>
+  <rect x="356" y="348" width="32" height="288" rx="16" fill="#94a3b8"/>
+  <path d="M388 350 610 402 388 454Z" fill="#facc15"/>
+  <path d="M388 454 548 493 388 532Z" fill="#f87171"/>
+  <text x="512" y="800" text-anchor="middle" fill="#f8fafc"
+    font-family="Arial, Helvetica, sans-serif" font-size="210" font-weight="800">FW</text>
+  <rect x="384" y="860" width="256" height="26" rx="13" fill="#facc15"/>
+</svg>
