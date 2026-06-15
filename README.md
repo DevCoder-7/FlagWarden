@@ -51,15 +51,16 @@ remain conceptual, defensive, or isolated-lab/CTF-only.
 
 Capture real Telegram screenshots after the bot is running. Crop screenshots to
 hide private usernames, phone numbers, tokens, ngrok URLs, admin panels, and
-private chats.
+private chats. The README displays each screenshot at a fixed width so the
+page stays easy to scan on GitHub.
 
 | Flow | Screenshot |
 |---|---|
-| Start menu | ![FlagWarden start menu](docs/screenshots/start.png) |
-| Challenge | ![FlagWarden challenge](docs/screenshots/challenge.png) |
-| Correct answer | ![FlagWarden correct answer](docs/screenshots/answer-correct.png) |
-| Score | ![FlagWarden score](docs/screenshots/score.png) |
-| Safety policy | ![FlagWarden safety policy](docs/screenshots/safety-policy.png) |
+| Start menu | <img src="docs/screenshots/start.png" alt="FlagWarden start menu" width="260"> |
+| Challenge | <img src="docs/screenshots/challenge.png" alt="FlagWarden challenge" width="260"> |
+| Correct answer | <img src="docs/screenshots/answer-correct.png" alt="FlagWarden correct answer" width="260"> |
+| Score | <img src="docs/screenshots/score.png" alt="FlagWarden score" width="260"> |
+| Safety policy | <img src="docs/screenshots/safety-policy.png" alt="FlagWarden safety policy" width="260"> |
 
 Screenshot guide: [docs/screenshots/README.md](docs/screenshots/README.md)
 
@@ -316,4 +317,3 @@ design.
 - Signed Telegram webhook secret validation.
 - Richer WhatsApp Cloud API menu support.
 - Optional LLM provider constrained to CTF-safe conceptual hints.
-
