@@ -24,10 +24,9 @@ def test_repository_user_progress_and_no_double_score(session_factory):
 def test_repository_category_progress_and_reports(session_factory):
     with session_factory() as session:
         repo = Repository(session)
-        user = repo.get_or_create_user("whatsapp", "555")
+        user = repo.get_or_create_user("telegram", "555")
         repo.mark_solved(user, "linux-001-permissions-644", "Linux", 50, 0)
         report = repo.save_report(user, "The hint could be clearer.", "linux-001-permissions-644")
 
         assert report.id is not None
         assert repo.category_progress(user.id) == {"Linux": 1}
-

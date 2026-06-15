@@ -46,7 +46,7 @@ lab-only learning.
 - Use a test Telegram account if possible.
 - Crop private usernames, chat lists, and profile photos.
 - Hide bot tokens, ngrok URLs, terminal windows, and admin pages.
-- Do not show `.env`, BotFather token messages, Meta credentials, or phone numbers.
+- Do not show `.env`, BotFather token messages, phone numbers, or private chats.
 - Revoke any token accidentally shown in a recording.
 
 ## Screenshot Checklist
@@ -56,4 +56,3 @@ lab-only learning.
 - `docs/screenshots/answer-correct.png`
 - `docs/screenshots/score.png`
 - `docs/screenshots/safety-policy.png`
-

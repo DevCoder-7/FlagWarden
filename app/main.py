@@ -6,12 +6,10 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import PlainTextResponse
+from fastapi import FastAPI, HTTPException, Request
 
 from app.bot.flow import BotFlow
 from app.bot.telegram_adapter import TelegramAdapter
-from app.bot.whatsapp_adapter import WhatsAppAdapter
 from app.config import Settings, get_settings
 from app.core.content import ChallengeBank
 from app.core.safety import SafetyChecker
@@ -77,16 +75,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     safety_checker = SafetyChecker()
     flow = BotFlow(challenge_bank, session_factory, settings, safety_checker=safety_checker)
     telegram = TelegramAdapter(flow, token=settings.secret_value(settings.telegram_bot_token))
-    whatsapp = WhatsAppAdapter(settings, flow)
 
     logger.info("app_config_loaded", extra={"settings": settings.redacted_dict()})
     if not settings.telegram_enabled:
         logger.info("telegram_integration_disabled")
-    if not settings.whatsapp_enabled:
-        logger.info(
-            "whatsapp_integration_disabled",
-            extra={"missing": settings.missing_whatsapp_vars()},
-        )
     if not settings.llm_enabled:
         logger.info("llm_integration_disabled")
 
@@ -109,7 +101,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.challenge_bank = challenge_bank
     app.state.flow = flow
     app.state.telegram = telegram
-    app.state.whatsapp = whatsapp
 
     @app.get("/health")
     def health() -> dict[str, Any]:
@@ -118,7 +109,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "app": settings.app_name,
             "environment": settings.app_env,
             "telegram_enabled": settings.telegram_enabled,
-            "whatsapp_enabled": settings.whatsapp_enabled,
             "llm_enabled": settings.llm_enabled,
             "challenge_count": len(challenge_bank.all()),
         }
@@ -134,19 +124,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         payload = await request.json()
         await telegram.process_update_json(payload)
         return {"ok": True}
-
-    @app.get("/webhooks/whatsapp")
-    async def whatsapp_verify(
-        hub_mode: str | None = Query(default=None, alias="hub.mode"),
-        hub_verify_token: str | None = Query(default=None, alias="hub.verify_token"),
-        hub_challenge: str | None = Query(default=None, alias="hub.challenge"),
-    ) -> PlainTextResponse:
-        challenge = whatsapp.verify_webhook(hub_mode, hub_verify_token, hub_challenge)
-        return PlainTextResponse(challenge)
-
-    @app.post("/webhooks/whatsapp")
-    async def whatsapp_webhook(payload: dict[str, Any]) -> dict[str, Any]:
-        return await whatsapp.handle_webhook(payload)
 
     return app
 

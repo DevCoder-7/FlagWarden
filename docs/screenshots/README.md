@@ -23,8 +23,7 @@ to end.
 ## Privacy Checklist
 
 - Crop private usernames, phone numbers, and chat lists.
-- Hide bot tokens, `.env` values, ngrok URLs, Meta credentials, and admin pages.
+- Hide bot tokens, `.env` values, ngrok URLs, admin pages, and private chats.
 - Do not show private chats or unrelated contacts.
 - If a token appears in a screenshot, revoke it in BotFather before publishing.
 - Prefer a clean test Telegram account for portfolio screenshots.
-

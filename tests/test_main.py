@@ -13,7 +13,11 @@ def test_health_endpoint(test_settings):
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["status"] == "ok"
-    assert payload["challenge_count"] == 30
-    assert payload["whatsapp_enabled"] is False
-
+    assert payload == {
+        "status": "ok",
+        "app": "FlagWarden",
+        "environment": "local",
+        "telegram_enabled": False,
+        "llm_enabled": False,
+        "challenge_count": 30,
+    }

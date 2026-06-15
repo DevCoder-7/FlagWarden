@@ -8,9 +8,9 @@ FlagWarden focuses on safe, legal CTF learning. Learners can request challenges,
 ask for hints, submit answers, track score/streak progress, and review an
 ethical-use policy directly inside Telegram.
 
-The backend is intentionally small and readable: FastAPI handles webhooks and
-health endpoints, a shared bot flow handles Telegram/WhatsApp-ready commands,
-SQLite stores user progress, and deterministic safety rules keep the experience
+The backend is intentionally small and readable: FastAPI handles Telegram
+webhooks and health endpoints, a shared bot flow handles commands, SQLite
+stores user progress, and deterministic safety rules keep the experience
 focused on CTF-only learning.
 
 Short tagline:
@@ -43,7 +43,6 @@ remain conceptual, defensive, or isolated-lab/CTF-only.
 - SQLite persistence for local development.
 - FastAPI webhook backend with `/health` and `/metrics`.
 - Rule-based safety guardrails for harmful requests.
-- WhatsApp adapter included and disabled until valid Meta credentials are configured.
 - Optional LLM adapter stub, disabled by default.
 - Automated tests and manual QA documentation.
 
@@ -69,8 +68,11 @@ Screenshot guide: [docs/screenshots/README.md](docs/screenshots/README.md)
 Recommended format: a 30-60 second video or GIF for GitHub, LinkedIn, and
 freelance bot developer applications.
 
-- Demo GIF path: `docs/demo/flagwarden-demo.gif`
-- Demo script: [docs/demo/demo-script.md](docs/demo/demo-script.md)
+| Demo Asset | Preview / Link | Notes |
+|---|---|---|
+| Demo GIF | <img src="docs/demo/flagwarden-demo.gif" alt="FlagWarden demo GIF" width="260"> | Optional GitHub README preview generated from real screenshots. |
+| Demo file | `docs/demo/flagwarden-demo.gif` | Keep the GIF short and crop private data. |
+| Demo script | [docs/demo/demo-script.md](docs/demo/demo-script.md) | 30-60 second recording plan for GitHub/LinkedIn. |
 
 Suggested sequence:
 
@@ -91,25 +93,24 @@ python scripts/make_demo_gif.py
 ## Architecture
 
 ```text
-Telegram Bot API        WhatsApp Cloud API
-       |                         |
-       v                         v
- app/bot/telegram_adapter.py  app/bot/whatsapp_adapter.py
-       |                         |
-       +-----------+-------------+
-                   v
-             app/bot/flow.py
-                   |
-     +-------------+--------------+
-     v             v              v
+Telegram Bot API
+       |
+       v
+app/bot/telegram_adapter.py
+       |
+       v
+app/bot/flow.py
+       |
++------+-------------+-------------+
+v                    v             v
 app/core/     app/core/       app/core/
 content.py    quiz_engine.py  safety.py
-     |             |              |
-     +-------------+--------------+
-                   v
-          app/db/repository.py
-                   |
-             SQLite / SQLAlchemy
+       |             |             |
+       +-------------+-------------+
+                     v
+            app/db/repository.py
+                     |
+              SQLite / SQLAlchemy
 ```
 
 ## Tech Stack
@@ -117,7 +118,6 @@ content.py    quiz_engine.py  safety.py
 - Python 3.11+
 - FastAPI
 - python-telegram-bot
-- WhatsApp Cloud API adapter over HTTP
 - SQLite
 - SQLAlchemy
 - Pydantic and pydantic-settings
@@ -153,18 +153,14 @@ notepad .env
 | `CHALLENGE_DATA_PATH` | No | JSON challenge file path |
 | `BOT_TEST_MODE` | No | Keeps local mode explicit |
 | `TELEGRAM_BOT_TOKEN` | For Telegram | Enables Telegram webhook processing |
-| `WHATSAPP_VERIFY_TOKEN` | For WhatsApp | Enables WhatsApp webhook verification |
-| `WHATSAPP_ACCESS_TOKEN` | For WhatsApp | Enables WhatsApp message sending |
-| `WHATSAPP_PHONE_NUMBER_ID` | For WhatsApp | WhatsApp Cloud API sender ID |
-| `WHATSAPP_API_VERSION` | No | Meta Graph API version |
 | `LLM_PROVIDER` | No | Defaults to `none` |
 | `LLM_API_KEY` | No | Reserved for future LLM providers |
 | `INPUT_MAX_LENGTH` | No | Maximum inbound message length |
 | `ANSWER_RATE_LIMIT_COUNT` | No | Max answer attempts per window |
 | `ANSWER_RATE_LIMIT_WINDOW_SECONDS` | No | Rate-limit window size |
 
-Do not commit `.env`, bot tokens, Meta tokens, private chat screenshots, or
-terminal output that reveals credentials.
+Do not commit `.env`, bot tokens, private chat screenshots, or terminal output
+that reveals credentials.
 
 ## Telegram BotFather Branding
 
@@ -180,7 +176,7 @@ manually in BotFather:
 7. Choose `Edit Description`
 8. Use: `Practice CTF safely. Capture flags ethically.`
 9. Choose `Edit About`
-10. Use: `FlagWarden helps learners practice ethical CTF cybersecurity challenges with hints, scoring, streaks, and safety guardrails.`
+10. Use: `Safe CTF cybersecurity practice with hints, scoring, streaks, and ethical guardrails.`
 11. Choose `Edit Botpic`
 12. Upload: `assets/logo/flagwarden-logo.png`
 
@@ -230,7 +226,7 @@ python -m ruff check app tests --no-cache
 
 The tests cover content loading, answer validation, scoring, duplicate solve
 prevention, safety refusals, repository behavior, config handling, Telegram
-adapter routing, WhatsApp parsing, and core bot flows.
+adapter routing, and core bot flows.
 
 ## Challenge Format
 
@@ -287,7 +283,6 @@ fallbacks, safety refusals, screenshots, and BotFather branding.
 - Answer rate limiting.
 - Safety guardrails for ethical, CTF-only learning.
 - Manual QA and automated tests.
-- WhatsApp-ready architecture with adapter disabled until Meta credentials are configured.
 
 ## Resume Bullets
 
@@ -315,5 +310,4 @@ design.
 - Per-category badges and achievements.
 - Postgres deployment profile for hosted environments.
 - Signed Telegram webhook secret validation.
-- Richer WhatsApp Cloud API menu support.
 - Optional LLM provider constrained to CTF-safe conceptual hints.

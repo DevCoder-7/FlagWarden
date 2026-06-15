@@ -10,8 +10,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Environment-driven application settings.
 
-    Optional platform credentials intentionally default to missing so the app can run in
-    local/test mode without Telegram or Meta credentials.
+    Optional Telegram credentials intentionally default to missing so the app can run in
+    local/test mode without a real bot token.
     """
 
     model_config = SettingsConfigDict(
@@ -30,11 +30,6 @@ class Settings(BaseSettings):
 
     telegram_bot_token: SecretStr | None = None
 
-    whatsapp_verify_token: SecretStr | None = None
-    whatsapp_access_token: SecretStr | None = None
-    whatsapp_phone_number_id: str | None = None
-    whatsapp_api_version: str = "v20.0"
-
     llm_provider: str = "none"
     llm_api_key: SecretStr | None = None
 
@@ -44,9 +39,6 @@ class Settings(BaseSettings):
 
     @field_validator(
         "telegram_bot_token",
-        "whatsapp_verify_token",
-        "whatsapp_access_token",
-        "whatsapp_phone_number_id",
         "llm_api_key",
         mode="before",
     )
@@ -61,16 +53,6 @@ class Settings(BaseSettings):
         return self.telegram_bot_token is not None
 
     @property
-    def whatsapp_enabled(self) -> bool:
-        return all(
-            [
-                self.whatsapp_verify_token,
-                self.whatsapp_access_token,
-                self.whatsapp_phone_number_id,
-            ]
-        )
-
-    @property
     def llm_enabled(self) -> bool:
         return self.llm_provider.lower() != "none" and self.llm_api_key is not None
 
@@ -78,16 +60,6 @@ class Settings(BaseSettings):
         if isinstance(secret, SecretStr):
             return secret.get_secret_value()
         return secret
-
-    def missing_whatsapp_vars(self) -> list[str]:
-        missing: list[str] = []
-        if not self.whatsapp_verify_token:
-            missing.append("WHATSAPP_VERIFY_TOKEN")
-        if not self.whatsapp_access_token:
-            missing.append("WHATSAPP_ACCESS_TOKEN")
-        if not self.whatsapp_phone_number_id:
-            missing.append("WHATSAPP_PHONE_NUMBER_ID")
-        return missing
 
     def redacted_dict(self) -> dict[str, Any]:
         data = self.model_dump()

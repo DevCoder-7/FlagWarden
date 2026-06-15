@@ -5,9 +5,11 @@ FlagWarden.
 
 ## Files
 
-- `demo-script.md` - 30-60 second recording plan, captions, and privacy checks.
-- `linkedin-post-draft.md` - ready-to-edit LinkedIn project announcement.
-- `flagwarden-demo.gif` - optional generated output from real screenshots.
+| Asset | Path | Notes |
+|---|---|---|
+| Demo GIF | `docs/demo/flagwarden-demo.gif` | Optional generated output from real screenshots. |
+| Demo script | `docs/demo/demo-script.md` | 30-60 second recording plan, captions, and privacy checks. |
+| LinkedIn draft | `docs/demo/linkedin-post-draft.md` | Ready-to-edit LinkedIn project announcement. |
 
 ## Workflow
 
@@ -22,4 +24,3 @@ FlagWarden.
    ```
 
 5. Review the output for privacy before publishing.
-

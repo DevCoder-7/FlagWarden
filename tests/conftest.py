@@ -21,9 +21,6 @@ def test_settings(tmp_path: Path) -> Settings:
         challenge_data_path="data/challenges.json",
         bot_test_mode=True,
         telegram_bot_token=None,
-        whatsapp_verify_token=None,
-        whatsapp_access_token=None,
-        whatsapp_phone_number_id=None,
         llm_provider="none",
     )
 
@@ -33,4 +30,3 @@ def session_factory(test_settings: Settings):
     engine = build_engine(test_settings.database_url)
     init_db(engine)
     return build_session_factory(engine)
-
