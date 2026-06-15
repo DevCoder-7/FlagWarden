@@ -1,4 +1,4 @@
-# FlagWarden — Telegram CTF Cybersecurity Learning Bot
+# FlagWarden (Telegram CTF Cybersecurity Learning Bot)
 
 FlagWarden is a Telegram bot that helps learners practice CTF cybersecurity challenges safely through daily challenges, hints, scoring, streaks, leaderboards, and ethical safety guardrails. It is designed as a portfolio-ready bot development project demonstrating conversational flow design, webhook-based backend architecture, stateful scoring, testing, and cybersecurity-safe product thinking.
 
@@ -70,7 +70,7 @@ freelance bot developer applications.
 
 | Demo Asset | Preview / Link | Notes |
 |---|---|---|
-| Demo GIF | <img src="docs/demo/flagwarden-demo.gif" alt="FlagWarden demo GIF" width="260"> | Optional GitHub README preview generated from real screenshots. |
+| Demo GIF | <img src="docs/demo/flagwarden-demo.gif" alt="FlagWarden demo GIF" width="260"> | Demo FlagWarden CTF Cybersecurity Learning Bot. |
 | Demo file | `docs/demo/flagwarden-demo.gif` | Keep the GIF short and crop private data. |
 | Demo script | [docs/demo/demo-script.md](docs/demo/demo-script.md) | 30-60 second recording plan for GitHub/LinkedIn. |
 
