@@ -1,3 +1,5 @@
+import secrets
+
 from __future__ import annotations
 
 import random
@@ -23,7 +25,7 @@ def assign_challenge(db: Session, user: User, randomize: bool = True) -> tuple[s
     available = [c for c in challenges.values() if c.id not in solved]
     if not available:
         return "🏆 You have solved every currently published challenge.", "none"
-    challenge = random.choice(available) if randomize else sorted(available, key=lambda c: c.id)[0]
+    challenge = secrets.choice(available) if randomize else sorted(available, key=lambda c: c.id)[0]
     progress = db.scalar(
         select(ChallengeProgress).where(
             ChallengeProgress.user_id == user.id,

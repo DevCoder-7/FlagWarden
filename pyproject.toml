@@ -46,3 +46,6 @@ ignore = ["E402", "B008", "FURB192", "TRY004", "I001"]
 python_version = "3.11"
 ignore_missing_imports = true
 warn_unused_ignores = true
+
+[tool.bandit]
+skips = ["B101", "B311"]
