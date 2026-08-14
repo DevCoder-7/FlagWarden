@@ -1,0 +1,33 @@
+id: forensics-basics-001
+title: Packet Triage Mindset
+category: digital-forensics
+difficulty: easy
+status: published
+version: 1.0.0
+author: Glenn Josia Devano
+reviewer: null
+learning_objectives:
+  - Identify the first useful triage step when a packet capture contains mixed traffic.
+skills:
+  - forensics.pcap
+  - network.triage
+points: 100
+hints:
+  - cost: 10
+    text: Start broad, then reduce noise using protocol and endpoint filters.
+verifier:
+  type: quiz_choice
+  choices:
+    - Filter and characterize the traffic before deep inspection
+    - Immediately export every payload
+    - Disable packet timestamps
+  correct_index: 0
+safety:
+  scope: ctf_only
+  notes: Use synthetic or authorized packet captures only.
+debrief:
+  concept: Network forensic triage
+  why_it_works: Characterizing protocols, endpoints, timing, and conversations narrows the evidence set before deeper analysis.
+  remediation: Not applicable; this is an investigation workflow. Preserve evidence integrity and document filters used.
+  references:
+    - Wireshark User Guide

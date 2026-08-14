@@ -1,13 +1,46 @@
 services:
-  ctf-cybersec-bot:
-    build: .
-    env_file:
-      - .env
+  postgres:
+    image: postgres:16-alpine
     environment:
-      DATABASE_URL: sqlite:///./runtime/ctf_bot.db
+      POSTGRES_USER: flagwarden
+      POSTGRES_PASSWORD: flagwarden
+      POSTGRES_DB: flagwarden
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flagwarden"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - flagwarden_pg:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg://flagwarden:flagwarden@postgres:5432/flagwarden
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-development-bot-token}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-development-webhook-secret}
+      ANSWER_PEPPER: ${ANSWER_PEPPER:-development-only-change-me}
+      ALLOW_DEBUG_AUTH: "true"
+      ADMIN_TELEGRAM_IDS: ${ADMIN_TELEGRAM_IDS:-10001}
+      RATE_LIMIT_BACKEND: ${RATE_LIMIT_BACKEND:-memory}
+      REDIS_URL: redis://redis:6379/0
+      OTEL_ENABLED: ${OTEL_ENABLED:-false}
     ports:
       - "8000:8000"
-    volumes:
-      - ./runtime:/app/runtime
-      - ./data:/app/data:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
+  redis:
+    image: redis:7-alpine
+    profiles: ["redis"]
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+
+volumes:
+  flagwarden_pg:

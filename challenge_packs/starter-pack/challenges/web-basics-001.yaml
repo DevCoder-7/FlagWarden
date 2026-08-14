@@ -1,0 +1,31 @@
+id: web-basics-001
+title: Output Context Fundamentals
+category: web-security
+difficulty: easy
+status: published
+version: 1.0.0
+author: Glenn Josia Devano
+reviewer: null
+learning_objectives:
+  - Explain why untrusted output must be encoded for its rendering context.
+skills:
+  - web.output-encoding
+  - web.xss-fundamentals
+points: 100
+hints:
+  - cost: 10
+    text: Think about the difference between storing text and safely rendering it in a browser.
+  - cost: 20
+    text: The defensive concept is context-aware output encoding.
+verifier:
+  type: exact_hmac
+  digest: "f21be9273b8b9d841c7cf3649b3d016a1b02d10dbde8b10723c035c27b337bfc"
+safety:
+  scope: concept_only
+  notes: This challenge teaches defensive web-security concepts and does not require targeting a live application.
+debrief:
+  concept: Context-aware output encoding
+  why_it_works: Browsers interpret markup according to context. Treating untrusted data as code-capable markup can create unintended execution paths.
+  remediation: Encode untrusted output for the correct HTML, attribute, URL, or JavaScript context and use framework-safe rendering defaults.
+  references:
+    - OWASP Cross Site Scripting Prevention Cheat Sheet

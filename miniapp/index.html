@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FlagWarden Dashboard</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div><span class="shield">🛡️</span><strong>FlagWarden</strong><small>Security Learning Platform</small></div>
+    <span id="role" class="pill">...</span>
+  </header>
+  <main>
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">YOUR LEARNING STATUS</p>
+        <h1 id="hello">Ready to defend your next flag?</h1>
+        <p>Structured CTF practice with secure progress tracking, hints, debriefs, and skill-based recommendations.</p>
+      </div>
+      <div class="stats">
+        <div><span id="score">0</span><small>Total XP</small></div>
+        <div><span id="streak">0</span><small>Day Streak</small></div>
+        <div><span id="solved">0</span><small>Solved</small></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Skill Mastery</h2>
+        <div id="skills" class="stack muted">No mastery data yet. Solve a challenge to begin.</div>
+      </article>
+      <article class="card">
+        <h2>Recommended Next</h2>
+        <div id="recommendations" class="stack muted">Loading recommendations…</div>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-title"><h2>Challenge Explorer</h2><span id="challengeCount" class="pill"></span></div>
+      <div id="challenges" class="challenge-grid"></div>
+    </section>
+
+    <section id="studio" class="card hidden">
+      <div class="section-title"><div><p class="eyebrow">AUTHOR / REVIEWER / ADMIN</p><h2>Challenge Studio</h2></div><span class="pill">RBAC protected</span></div>
+      <p>Draft → Review → Approved → Published. Content is schema-validated before entering review.</p>
+      <div class="studio-grid">
+        <div>
+          <h3>Create Draft</h3>
+          <textarea id="draftJson" spellcheck="false" aria-label="Challenge draft JSON"></textarea>
+          <button id="createDraft">Validate & Save Draft</button>
+          <p id="studioMessage" class="muted"></p>
+        </div>
+        <div>
+          <h3>Existing Drafts</h3>
+          <div id="drafts" class="stack muted">No drafts loaded.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Built as a legal CTF/lab learning platform · FlagWarden 2.0</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

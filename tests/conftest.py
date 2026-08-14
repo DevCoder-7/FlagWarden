@@ -1,32 +1,32 @@
-from __future__ import annotations
-
-from pathlib import Path
-
+import os
 import pytest
+from fastapi.testclient import TestClient
 
-from app.config import Settings
-from app.core.content import ChallengeBank
-from app.db.repository import build_engine, build_session_factory, init_db
+os.environ["ENVIRONMENT"] = "development"
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["TELEGRAM_BOT_TOKEN"] = "123456:test-token"
+os.environ["TELEGRAM_WEBHOOK_SECRET"] = "test-webhook-secret"
+os.environ["ANSWER_PEPPER"] = "development-only-change-me"
+os.environ["ALLOW_DEBUG_AUTH"] = "true"
+os.environ["ADMIN_TELEGRAM_IDS"] = "10001"
+os.environ["REVIEWER_TELEGRAM_IDS"] = "10002"
+os.environ["AUTHOR_TELEGRAM_IDS"] = "10003"
+
+from flagwarden.config import get_settings
+from flagwarden.db import Base, get_engine, init_db
+from flagwarden.main import app
+
+
+@pytest.fixture(autouse=True)
+def clean_db():
+    get_settings.cache_clear()
+    engine = get_engine()
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+    yield
 
 
 @pytest.fixture
-def challenge_bank() -> ChallengeBank:
-    return ChallengeBank.from_file(Path("data/challenges.json"))
-
-
-@pytest.fixture
-def test_settings(tmp_path: Path) -> Settings:
-    return Settings(
-        database_url=f"sqlite:///{tmp_path / 'test.db'}",
-        challenge_data_path="data/challenges.json",
-        bot_test_mode=True,
-        telegram_bot_token=None,
-        llm_provider="none",
-    )
-
-
-@pytest.fixture
-def session_factory(test_settings: Settings):
-    engine = build_engine(test_settings.database_url)
-    init_db(engine)
-    return build_session_factory(engine)
+def client():
+    with TestClient(app) as c:
+        yield c

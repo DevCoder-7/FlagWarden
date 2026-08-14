@@ -1,313 +1,153 @@
-# FlagWarden (Telegram CTF Cybersecurity Learning Bot)
+# 🛡️ FlagWarden 2.0
 
-FlagWarden is a Telegram bot that helps learners practice CTF cybersecurity challenges safely through daily challenges, hints, scoring, streaks, leaderboards, and ethical safety guardrails. It is designed as a portfolio-ready bot development project demonstrating conversational flow design, webhook-based backend architecture, stateful scoring, testing, and cybersecurity-safe product thinking.
+**Security-First CTF Learning & Challenge Management Platform for Telegram**
 
-## Overview
+FlagWarden 2.0 turns the original Telegram CTF learning bot into a recruiter-ready security engineering project. It keeps the original learning loop—challenges, hints, scoring, streaks, progress tracking, safety guardrails, FastAPI, and automated testing—while adding a secure challenge SDK, PostgreSQL-ready persistence, webhook hardening, Telegram Mini App authentication, RBAC challenge authoring, adaptive skill tracking, security regression tests, observability, and DevSecOps automation.
 
-FlagWarden focuses on safe, legal CTF learning. Learners can request challenges,
-ask for hints, submit answers, track score/streak progress, and review an
-ethical-use policy directly inside Telegram.
+> This repository is designed for **legal CTF/lab learning only**. It does not target third-party systems and intentionally excludes autonomous exploitation and real-target scanning.
 
-The backend is intentionally small and readable: FastAPI handles Telegram
-webhooks and health endpoints, a shared bot flow handles commands, SQLite
-stores user progress, and deterministic safety rules keep the experience
-focused on CTF-only learning.
+## Why this project is different
 
-Short tagline:
+Instead of being only a bot, FlagWarden is structured as a small security product:
 
-```text
-Practice CTF safely. Capture flags ethically.
-```
-
-## Ethical Scope
-
-FlagWarden is for ethical cybersecurity education, CTF practice, and defensive
-learning only.
-
-**Use only in legal CTF labs or systems you own or are authorized to test.**
-
-The bot refuses requests involving real targets, unauthorized access,
-credential theft, phishing, malware, persistence, evasion, public-IP scanning,
-account takeover, or access-control bypass steps. Cybersecurity content should
-remain conceptual, defensive, or isolated-lab/CTF-only.
-
-## Features
-
-- Telegram command-based and inline-button user experience.
-- Daily challenge, random challenge, and quiz mode.
-- Progressive hints with hint-based score reduction.
-- Answer validation with accepted answer aliases.
-- Score, solved challenge count, streak tracking, profile, and leaderboard.
-- Duplicate solve prevention.
-- Rate limiting for excessive answer submissions.
-- SQLite persistence for local development.
-- FastAPI webhook backend with `/health` and `/metrics`.
-- Rule-based safety guardrails for harmful requests.
-- Optional LLM adapter stub, disabled by default.
-- Automated tests and manual QA documentation.
-
-## Screenshots
-
-Capture real Telegram screenshots after the bot is running. Crop screenshots to
-hide private usernames, phone numbers, tokens, ngrok URLs, admin panels, and
-private chats. The README displays each screenshot at a fixed width so the
-page stays easy to scan on GitHub.
-
-| Flow | Screenshot |
-|---|---|
-| Start menu | <img src="docs/screenshots/start.png" alt="FlagWarden start menu" width="260"> |
-| Challenge | <img src="docs/screenshots/challenge.png" alt="FlagWarden challenge" width="260"> |
-| Correct answer | <img src="docs/screenshots/answer-correct.png" alt="FlagWarden correct answer" width="260"> |
-| Score | <img src="docs/screenshots/score.png" alt="FlagWarden score" width="260"> |
-| Safety policy | <img src="docs/screenshots/safety-policy.png" alt="FlagWarden safety policy" width="260"> |
-
-Screenshot guide: [docs/screenshots/README.md](docs/screenshots/README.md)
-
-## Demo
-
-Recommended format: a 30-60 second video or GIF for GitHub, LinkedIn, and
-freelance bot developer applications.
-
-| Demo Asset | Preview / Link | Notes |
-|---|---|---|
-| Demo GIF | <img src="docs/demo/flagwarden-demo.gif" alt="FlagWarden demo GIF" width="260"> | Demo FlagWarden CTF Cybersecurity Learning Bot. |
-| Demo file | `docs/demo/flagwarden-demo.gif` | Keep the GIF short and crop private data. |
-| Demo script | [docs/demo/demo-script.md](docs/demo/demo-script.md) | 30-60 second recording plan for GitHub/LinkedIn. |
-
-Suggested sequence:
-
-1. Send `/start`
-2. Open a challenge
-3. Request a hint
-4. Submit `/answer flag{...}`
-5. View `/score`
-6. Open `/safety`
-
-Optional GIF helper:
-
-```bash
-python -m pip install pillow
-python scripts/make_demo_gif.py
-```
+- **Telegram Bot** — daily/random challenges, hints, submissions, scoring, streaks
+- **Challenge Pack SDK** — versioned YAML challenges, schema validation, secure answer verification
+- **Learning Engine** — skill mastery, post-solve debriefs, deterministic recommendations
+- **Telegram Mini App** — dashboard, progress, recommendations, challenge browser
+- **Challenge Studio API** — Author → Reviewer → Admin workflow with RBAC
+- **Security Controls** — webhook secret validation, update idempotency, HMAC answer verification, Mini App init-data validation, audit logging, rate limiting
+- **Production-style backend** — FastAPI, SQLAlchemy, Alembic, PostgreSQL support, Docker Compose
+- **Quality & DevSecOps** — Pytest, optional Hypothesis property tests, CodeQL, Bandit, pip-audit, Dependabot, container build checks
+- **Observability** — liveness/readiness endpoints, Prometheus metrics, structured audit events
 
 ## Architecture
 
-```text
-Telegram Bot API
-       |
-       v
-app/bot/telegram_adapter.py
-       |
-       v
-app/bot/flow.py
-       |
-+------+-------------+-------------+
-v                    v             v
-app/core/     app/core/       app/core/
-content.py    quiz_engine.py  safety.py
-       |             |             |
-       +-------------+-------------+
-                     v
-            app/db/repository.py
-                     |
-              SQLite / SQLAlchemy
+```mermaid
+flowchart TB
+    TG[Telegram Users] --> BOT[Telegram Bot Webhook]
+    TG --> MINI[Telegram Mini App]
+    BOT --> API[FastAPI Gateway]
+    MINI --> API
+    API --> AUTH[Telegram Auth / RBAC]
+    API --> CH[Challenge Service]
+    API --> LEARN[Progress & Mastery Engine]
+    API --> STUDIO[Challenge Studio]
+    CH --> PACKS[Challenge Pack SDK]
+    CH --> DB[(PostgreSQL / SQLite)]
+    LEARN --> DB
+    STUDIO --> DB
+    API --> AUDIT[Audit Log]
+    API --> METRICS[Prometheus Metrics]
 ```
 
-## Tech Stack
+## Security highlights
 
-- Python 3.11+
-- FastAPI
-- python-telegram-bot
-- SQLite
-- SQLAlchemy
-- Pydantic and pydantic-settings
-- Pytest
-- Ruff
-- Docker and Docker Compose
+1. **Webhook authentication** via `X-Telegram-Bot-Api-Secret-Token`.
+2. **Idempotent update processing** using a unique Telegram `update_id` record.
+3. **HMAC-based answer verification**—answers do not need to be stored in plaintext.
+4. **Per-user dynamic flags** supported by `dynamic_hmac` verifier.
+5. **Mini App `initData` verification** on the backend before trusting Telegram identity.
+6. **RBAC** roles: `USER`, `AUTHOR`, `REVIEWER`, `ADMIN`.
+7. **Challenge lifecycle**: Draft → Review → Approved → Published → Deprecated.
+8. **Sanitized audit logging**—no bot tokens, flags, or raw session data in logs.
+9. **Rate limiting** with in-memory default and a clean adapter boundary for Redis.
+10. **Security regression testing** around scoring, duplicate solves, webhook replay, auth, and verifier behavior.
 
-## Setup
+## Quick start
 
 ```bash
-python -m venv .venv
-. .venv/bin/activate  # Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
 cp .env.example .env
-```
-
-Windows PowerShell:
-
-```powershell
-python -m pip install -e ".[dev]"
-Copy-Item .env.example .env
-notepad .env
-```
-
-## Environment Variables
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `APP_NAME` | No | Public app label, defaults to `FlagWarden` |
-| `APP_ENV` | No | Environment label for health/logs |
-| `LOG_LEVEL` | No | Logging level |
-| `DATABASE_URL` | No | SQLAlchemy database URL |
-| `CHALLENGE_DATA_PATH` | No | JSON challenge file path |
-| `BOT_TEST_MODE` | No | Keeps local mode explicit |
-| `TELEGRAM_BOT_TOKEN` | For Telegram | Enables Telegram webhook processing |
-| `LLM_PROVIDER` | No | Defaults to `none` |
-| `LLM_API_KEY` | No | Reserved for future LLM providers |
-| `INPUT_MAX_LENGTH` | No | Maximum inbound message length |
-| `ANSWER_RATE_LIMIT_COUNT` | No | Max answer attempts per window |
-| `ANSWER_RATE_LIMIT_WINDOW_SECONDS` | No | Rate-limit window size |
-
-Do not commit `.env`, bot tokens, private chat screenshots, or terminal output
-that reveals credentials.
-
-## Telegram BotFather Branding
-
-Code cannot reliably rename an existing Telegram bot. Update the live bot
-manually in BotFather:
-
-1. Open Telegram and chat with `@BotFather`
-2. Run `/mybots`
-3. Select the existing bot
-4. Choose `Edit Bot`
-5. Choose `Edit Name`
-6. Set the name to `FlagWarden`
-7. Choose `Edit Description`
-8. Use: `Practice CTF safely. Capture flags ethically.`
-9. Choose `Edit About`
-10. Use: `Safe CTF cybersecurity practice with hints, scoring, streaks, and ethical guardrails.`
-11. Choose `Edit Botpic`
-12. Upload: `assets/logo/flagwarden-logo.png`
-
-If creating a new username, try:
-
-- `@FlagWardenBot`
-- `@FlagWardenCTFBot`
-- `@FlagWardenCoachBot`
-- `@TryFlagWardenBot`
-
-Suggested BotFather command list:
-
-```text
-start - Show welcome menu
-help - Show available commands
-daily - Get today's CTF challenge
-challenge - Get a random challenge
-quiz - Start quiz mode
-hint - Get a hint for current challenge
-answer - Submit an answer
-score - View score, solved challenges, and streak
-profile - View progress by category
-leaderboard - View top users
-safety - Read the ethical use policy
-categories - Browse challenge categories
-report - Report an issue or feedback
-```
-
-## Running Locally
-
-```bash
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -e '.[dev]'
+python -m flagwarden.cli pack validate challenge_packs/starter-pack
+uvicorn flagwarden.main:app --reload
 ```
 
 Open:
+- API docs: `http://127.0.0.1:8000/docs`
+- Mini App demo: `http://127.0.0.1:8000/app/`
+- Health: `http://127.0.0.1:8000/health/live`
+- Metrics: `http://127.0.0.1:8000/metrics`
 
-- Health: <http://localhost:8000/health>
-- Metrics: <http://localhost:8000/metrics>
-- API docs: <http://localhost:8000/docs>
+### Docker
+
+```bash
+docker compose up --build
+```
+
+The default Compose stack uses PostgreSQL. Local development can still use SQLite through `DATABASE_URL`.
+
+## Challenge Pack SDK
+
+```text
+challenge_packs/
+└── starter-pack/
+    ├── pack.yaml
+    └── challenges/
+        ├── web-basics-001.yaml
+        └── forensics-basics-001.yaml
+```
+
+Validate a pack:
+
+```bash
+python -m flagwarden.cli pack validate challenge_packs/starter-pack
+```
+
+Generate a secure answer digest:
+
+```bash
+python -m flagwarden.cli answer digest 'your-answer'
+```
+
+The demo pack uses a **development-only pepper** from `.env.example`. Rotate it for any real deployment.
+
+## Mini App authentication
+
+The frontend sends Telegram's raw `initData` to the backend. The backend validates the HMAC signature and checks `auth_date` freshness before using the Telegram user identity. A development-only debug identity header is available only when explicitly enabled.
 
 ## Testing
 
 ```bash
-python -m pytest
-python -m ruff check app tests --no-cache
+pytest -q
 ```
 
-The tests cover content loading, answer validation, scoring, duplicate solve
-prevention, safety refusals, repository behavior, config handling, Telegram
-adapter routing, and core bot flows.
+Optional property-based tests:
 
-## Challenge Format
-
-Each object in [data/challenges.json](data/challenges.json) uses this shape:
-
-```json
-{
-  "id": "web-002-parameterized-queries",
-  "title": "Safer Database Queries",
-  "category": "Web",
-  "difficulty": "beginner",
-  "prompt": "A developer changes string-built SQL into parameterized queries...",
-  "answer": "sql injection",
-  "acceptable_answers": ["sql injection", "injection"],
-  "hints": ["Hint 1", "Hint 2"],
-  "explanation": "Parameterized queries bind user input as data...",
-  "points": 75,
-  "safety_note": "This is defensive secure-coding guidance..."
-}
+```bash
+pip install -e '.[property-tests]'
+pytest -q tests/property
 ```
 
-## Safety Guardrails
+## Repository map
 
-FlagWarden uses deterministic rules in [app/core/safety.py](app/core/safety.py)
-to refuse requests involving:
+```text
+flagwarden/                 Python application
+challenge_packs/            Versioned challenge content
+miniapp/                    Telegram Mini App dashboard
+alembic/                    Database migrations
+scripts/                    Setup and validation helpers
+tests/                      Unit/integration/security tests
+docs/                       PRD, architecture, threat model, testing, authoring
+.github/workflows/          CI + security automation
+```
 
-- Real-target hacking or account takeover.
-- Unauthorized access.
-- Credential, token, cookie, or session theft.
-- Phishing or fake login collection.
-- Malware, ransomware, keyloggers, backdoors, or destructive payloads.
-- Persistence, evasion, stealth, antivirus/EDR bypass.
-- Public-IP scanning or enumeration.
-- Authentication, 2FA, paywall, or access-control bypass.
+## Recruiter demo flow (60–90 seconds)
 
-Refusals redirect users toward legal CTF labs, toy scenarios, defensive
-checklists, and conceptual explanations.
+1. Show the architecture diagram.
+2. Run the Challenge Pack validator.
+3. Open the Mini App dashboard.
+4. Show a challenge assignment and hint penalty.
+5. Submit a correct answer and show mastery/progress update.
+6. Replay the same webhook/update and show idempotent behavior.
+7. Show a Challenge Studio draft moving through review/publish states.
+8. Show CI/security checks and the threat model.
 
-## Manual QA Checklist
+## Migration from FlagWarden 1.x
 
-Use [docs/manual-qa-checklist.md](docs/manual-qa-checklist.md) before recording
-a demo or publishing screenshots. It covers `/start`, `/help`, challenges,
-hints, answer submission, repeated solve behavior, score persistence,
-fallbacks, safety refusals, screenshots, and BotFather branding.
+See [`docs/MIGRATION_GUIDE.md`](docs/MIGRATION_GUIDE.md). The v2 codebase is intentionally modular so the existing challenge content and Telegram copy can be migrated without preserving old technical debt.
 
-## Portfolio Highlights
+## Safety
 
-- Telegram bot development with command and inline-button UX.
-- FastAPI webhook backend.
-- Stateful user progress with SQLite persistence.
-- Challenge engine for daily/random CTF prompts.
-- Scoring and streak logic.
-- Duplicate solve prevention.
-- Answer rate limiting.
-- Safety guardrails for ethical, CTF-only learning.
-- Manual QA and automated tests.
-
-## Resume Bullets
-
-- Built FlagWarden, a Telegram-based CTF Cybersecurity Learning Bot with interactive challenge flows, hints, answer validation, scoring, streak tracking, and safety guardrails.
-- Implemented command-based and button-based conversational UX for daily challenges, random challenges, quizzes, score tracking, and ethical-use policy.
-- Designed stateful user progress with SQLite persistence, duplicate solve prevention, hint-based score reduction, and rate limiting.
-- Developed a FastAPI webhook backend with health/metrics endpoints and automated tests for challenge logic, scoring, safety refusal, repository/database behavior, and bot adapters.
-- Prepared portfolio documentation with setup instructions, screenshot guide, demo script, LinkedIn post draft, manual QA checklist, and Telegram BotFather branding guide.
-
-## LinkedIn Project Description
-
-I built FlagWarden, a Telegram-based CTF Cybersecurity Learning Bot designed
-for safe and ethical cybersecurity practice. It supports daily challenges,
-random CTF challenges, hints, answer validation, scoring, streak tracking,
-leaderboards, and safety guardrails that keep the experience focused on legal
-CTF labs and authorized environments. This project helped me practice bot
-development, conversational flow design, state management, FastAPI webhook
-architecture, SQLite persistence, testing, and cybersecurity-safe product
-design.
-
-## Future Improvements
-
-- Admin dashboard for reviewing reports and challenge analytics.
-- Scheduled daily challenge reminders.
-- Per-category badges and achievements.
-- Postgres deployment profile for hosted environments.
-- Signed Telegram webhook secret validation.
-- Optional LLM provider constrained to CTF-safe conceptual hints.
+FlagWarden is intentionally scoped to educational CTF/lab content. See [`SECURITY.md`](SECURITY.md) and [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md).

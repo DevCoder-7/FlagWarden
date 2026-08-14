@@ -1,1 +1,0 @@
-"""FlagWarden application package."""
