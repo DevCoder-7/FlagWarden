@@ -58,7 +58,8 @@ def test_valid_telegram_init_data():
 def test_tampered_telegram_init_data_rejected():
     token = "123456:test-token"
     raw = make_init_data(token, 77).replace("%2277%22", "%2299%22")
-    # Ensure any tamper is rejected. If string replacement did not hit due to encoding shape, alter query_id.
+    # Ensure any tamper is rejected. 
+    # If string replacement did not hit due to encoding shape, alter query_id.
     if raw == make_init_data(token, 77):
         raw += "&extra=tamper"
     with pytest.raises(AuthenticationError):

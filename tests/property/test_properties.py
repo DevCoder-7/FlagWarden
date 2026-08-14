@@ -1,4 +1,10 @@
 import pytest
+hypothesis = pytest.importorskip("hypothesis")
+
+from hypothesis import given  # noqa: E402
+from hypothesis import strategies as st  # noqa: E402
+
+from flagwarden.security import dynamic_flag, normalize_answer  # noqa: E402
 
 hypothesis = pytest.importorskip("hypothesis")
 from hypothesis import given
