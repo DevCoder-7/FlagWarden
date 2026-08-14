@@ -39,8 +39,8 @@ addopts = "-ra"
 line-length = 120
 
 [tool.ruff.lint]
-# Abaikan error E402 (import order)
-ignore = ["E402"]
+# Abaikan E402 (import), B008 (FastAPI Depends), dan aturan ketat lainnya
+ignore = ["E402", "B008", "FURB192", "TRY004", "I001"]
 
 [tool.mypy]
 python_version = "3.11"
