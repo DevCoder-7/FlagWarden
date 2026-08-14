@@ -21,9 +21,7 @@ HELP = """🛡️ FlagWarden commands
 
 async def send_message(chat_id: int, text: str) -> None:
     settings = get_settings()
-    if settings.telegram_bot_token.startswith(
-        "development-"
-    ) or settings.telegram_bot_token.startswith("123456:"):
+    if settings.telegram_bot_token.startswith("development-") or settings.telegram_bot_token.startswith("123456:"):
         return
     url = f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage"
     async with httpx.AsyncClient(timeout=10) as client:

@@ -36,9 +36,7 @@ def upgrade():
     op.create_table(
         "challenge_progress",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column(
-            "user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
-        ),
+        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
         sa.Column("challenge_id", sa.String(128), nullable=False),
         sa.Column("solved", sa.Boolean(), nullable=False),
         sa.Column("hints_used", sa.Integer(), nullable=False),
@@ -52,9 +50,7 @@ def upgrade():
     op.create_table(
         "skill_mastery",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column(
-            "user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
-        ),
+        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
         sa.Column("skill", sa.String(128), nullable=False),
         sa.Column("score", sa.Float(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
@@ -87,9 +83,7 @@ def upgrade():
     )
     op.create_index("ix_challenge_drafts_challenge_id", "challenge_drafts", ["challenge_id"])
     op.create_index("ix_challenge_drafts_status", "challenge_drafts", ["status"])
-    op.create_index(
-        "ix_challenge_drafts_author_telegram_id", "challenge_drafts", ["author_telegram_id"]
-    )
+    op.create_index("ix_challenge_drafts_author_telegram_id", "challenge_drafts", ["author_telegram_id"])
 
 
 def downgrade():

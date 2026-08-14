@@ -20,9 +20,7 @@ def make_init_data(bot_token: str, user_id: int = 42):
     fields = {
         "auth_date": str(int(datetime.now(UTC).timestamp())),
         "query_id": "AAEAAAE",
-        "user": json.dumps(
-            {"id": user_id, "first_name": "Test", "username": "tester"}, separators=(",", ":")
-        ),
+        "user": json.dumps({"id": user_id, "first_name": "Test", "username": "tester"}, separators=(",", ":")),
     }
     check = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
     secret = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
@@ -58,7 +56,7 @@ def test_valid_telegram_init_data():
 def test_tampered_telegram_init_data_rejected():
     token = "123456:test-token"
     raw = make_init_data(token, 77).replace("%2277%22", "%2299%22")
-    # Ensure any tamper is rejected. 
+    # Ensure any tamper is rejected.
     # If string replacement did not hit due to encoding shape, alter query_id.
     if raw == make_init_data(token, 77):
         raw += "&extra=tamper"

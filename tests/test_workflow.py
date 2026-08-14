@@ -28,9 +28,7 @@ def challenge_payload():
 
 
 def test_author_reviewer_admin_workflow(client):
-    created = client.post(
-        "/api/admin/drafts", headers=h(10003), json={"challenge": challenge_payload()}
-    )
+    created = client.post("/api/admin/drafts", headers=h(10003), json={"challenge": challenge_payload()})
     assert created.status_code == 200
     draft_id = created.json()["id"]
     assert created.json()["status"] == "DRAFT"

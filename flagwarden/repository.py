@@ -15,9 +15,7 @@ def static_challenges() -> dict[str, Challenge]:
 
 
 def published_draft_challenges(db: Session) -> dict[str, Challenge]:
-    rows = db.scalars(
-        select(ChallengeDraft).where(ChallengeDraft.status == DraftStatus.PUBLISHED.value)
-    ).all()
+    rows = db.scalars(select(ChallengeDraft).where(ChallengeDraft.status == DraftStatus.PUBLISHED.value)).all()
     out = {}
     for row in rows:
         challenge = Challenge.model_validate(json.loads(row.content_json))

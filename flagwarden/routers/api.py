@@ -117,9 +117,7 @@ def submit_draft(
 ):
     row = _draft_or_404(db, draft_id)
     if row.author_telegram_id != user.telegram_user_id and user.role != Role.ADMIN.value:
-        raise HTTPException(
-            status_code=403, detail="only the author or admin can submit this draft"
-        )
+        raise HTTPException(status_code=403, detail="only the author or admin can submit this draft")
     if row.status != DraftStatus.DRAFT.value:
         raise HTTPException(status_code=409, detail="draft is not in DRAFT state")
     Challenge.model_validate(json.loads(row.content_json))

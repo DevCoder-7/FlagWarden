@@ -49,9 +49,7 @@ class ProcessedUpdate(Base):
 
 class ChallengeProgress(Base):
     __tablename__ = "challenge_progress"
-    __table_args__ = (
-        UniqueConstraint("user_id", "challenge_id", name="uq_progress_user_challenge"),
-    )
+    __table_args__ = (UniqueConstraint("user_id", "challenge_id", name="uq_progress_user_challenge"),)
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     challenge_id: Mapped[str] = mapped_column(String(128), index=True)
@@ -69,9 +67,7 @@ class SkillMastery(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     skill: Mapped[str] = mapped_column(String(128), index=True)
     score: Mapped[float] = mapped_column(Float, default=0.0)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=utcnow, onupdate=utcnow
-    )
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 
 
 class AuditEvent(Base):
@@ -94,6 +90,4 @@ class ChallengeDraft(Base):
     reviewer_telegram_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
     content_json: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=utcnow, onupdate=utcnow
-    )
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)

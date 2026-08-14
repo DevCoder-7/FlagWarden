@@ -28,9 +28,7 @@ def update_streak(user: User) -> None:
 
 def solved_ids(db: Session, user_id: int) -> set[str]:
     rows = db.scalars(
-        select(ChallengeProgress).where(
-            ChallengeProgress.user_id == user_id, ChallengeProgress.solved.is_(True)
-        )
+        select(ChallengeProgress).where(ChallengeProgress.user_id == user_id, ChallengeProgress.solved.is_(True))
     ).all()
     return {r.challenge_id for r in rows}
 

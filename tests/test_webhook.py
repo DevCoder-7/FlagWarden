@@ -1,18 +1,9 @@
 def update(uid=1, text="/start"):
-    return {
-        "update_id": uid,
-        "message": {
-            "from": {"id": 55, "username": "demo"},
-            "chat": {"id": 55},
-            "text": text
-        }
-    }
+    return {"update_id": uid, "message": {"from": {"id": 55, "username": "demo"}, "chat": {"id": 55}, "text": text}}
 
 
 def test_webhook_rejects_bad_secret(client):
-    r = client.post(
-        "/telegram/webhook", json=update(), headers={"X-Telegram-Bot-Api-Secret-Token": "wrong"}
-    )
+    r = client.post("/telegram/webhook", json=update(), headers={"X-Telegram-Bot-Api-Secret-Token": "wrong"})
     assert r.status_code == 403
 
 

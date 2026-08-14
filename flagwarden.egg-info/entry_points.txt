@@ -1,0 +1,2 @@
+[console_scripts]
+flagwarden = flagwarden.cli:main

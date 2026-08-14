@@ -9,10 +9,7 @@ SENSITIVE_KEYS = {"answer", "flag", "token", "password", "session", "init_data",
 
 def _sanitize(value):
     if isinstance(value, dict):
-        return {
-            k: ("[REDACTED]" if k.lower() in SENSITIVE_KEYS else _sanitize(v))
-            for k, v in value.items()
-        }
+        return {k: ("[REDACTED]" if k.lower() in SENSITIVE_KEYS else _sanitize(v)) for k, v in value.items()}
     if isinstance(value, list):
         return [_sanitize(v) for v in value]
     return value

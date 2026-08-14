@@ -1,8 +1,6 @@
-import secrets
-
 from __future__ import annotations
 
-import random
+import secrets
 from datetime import UTC, datetime
 
 from sqlalchemy import select

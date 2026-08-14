@@ -46,9 +46,7 @@ class TelegramIdentity:
     auth_date: int
 
 
-def verify_telegram_init_data(
-    raw_init_data: str, bot_token: str, max_age_seconds: int = 300
-) -> TelegramIdentity:
+def verify_telegram_init_data(raw_init_data: str, bot_token: str, max_age_seconds: int = 300) -> TelegramIdentity:
     if not raw_init_data:
         raise AuthenticationError("Missing Telegram initData")
 
