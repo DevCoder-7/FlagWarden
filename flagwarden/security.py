@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import datetime, timezone
 import hashlib
 import hmac
 import json
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from urllib.parse import parse_qsl
 
 
@@ -46,7 +46,9 @@ class TelegramIdentity:
     auth_date: int
 
 
-def verify_telegram_init_data(raw_init_data: str, bot_token: str, max_age_seconds: int = 300) -> TelegramIdentity:
+def verify_telegram_init_data(
+    raw_init_data: str, bot_token: str, max_age_seconds: int = 300
+) -> TelegramIdentity:
     if not raw_init_data:
         raise AuthenticationError("Missing Telegram initData")
 
@@ -67,7 +69,7 @@ def verify_telegram_init_data(raw_init_data: str, bot_token: str, max_age_second
     except (KeyError, ValueError) as exc:
         raise AuthenticationError("Invalid auth_date") from exc
 
-    now = int(datetime.now(timezone.utc).timestamp())
+    now = int(datetime.now(UTC).timestamp())
     age = now - auth_date
     if age < -30 or age > max_age_seconds:
         raise AuthenticationError("Expired or future Telegram initData")

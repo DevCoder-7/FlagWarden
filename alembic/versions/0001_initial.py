@@ -2,8 +2,10 @@
 Revision ID: 0001_initial
 Revises:
 """
-from alembic import op
+
 import sqlalchemy as sa
+
+from alembic import op
 
 revision = "0001_initial"
 down_revision = None
@@ -12,7 +14,8 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table("users",
+    op.create_table(
+        "users",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("telegram_user_id", sa.Integer(), nullable=False),
         sa.Column("username", sa.String(128)),
@@ -25,13 +28,17 @@ def upgrade():
         sa.UniqueConstraint("telegram_user_id"),
     )
     op.create_index("ix_users_telegram_user_id", "users", ["telegram_user_id"])
-    op.create_table("processed_updates",
+    op.create_table(
+        "processed_updates",
         sa.Column("update_id", sa.Integer(), primary_key=True),
         sa.Column("processed_at", sa.DateTime(timezone=True), nullable=False),
     )
-    op.create_table("challenge_progress",
+    op.create_table(
+        "challenge_progress",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
+        sa.Column(
+            "user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        ),
         sa.Column("challenge_id", sa.String(128), nullable=False),
         sa.Column("solved", sa.Boolean(), nullable=False),
         sa.Column("hints_used", sa.Integer(), nullable=False),
@@ -42,9 +49,12 @@ def upgrade():
     )
     op.create_index("ix_challenge_progress_user_id", "challenge_progress", ["user_id"])
     op.create_index("ix_challenge_progress_challenge_id", "challenge_progress", ["challenge_id"])
-    op.create_table("skill_mastery",
+    op.create_table(
+        "skill_mastery",
         sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False),
+        sa.Column(
+            "user_id", sa.Integer(), sa.ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        ),
         sa.Column("skill", sa.String(128), nullable=False),
         sa.Column("score", sa.Float(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), nullable=False),
@@ -52,7 +62,8 @@ def upgrade():
     )
     op.create_index("ix_skill_mastery_user_id", "skill_mastery", ["user_id"])
     op.create_index("ix_skill_mastery_skill", "skill_mastery", ["skill"])
-    op.create_table("audit_events",
+    op.create_table(
+        "audit_events",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("event_type", sa.String(96), nullable=False),
         sa.Column("actor_telegram_id", sa.Integer()),
@@ -62,7 +73,8 @@ def upgrade():
     )
     op.create_index("ix_audit_events_event_type", "audit_events", ["event_type"])
     op.create_index("ix_audit_events_actor_telegram_id", "audit_events", ["actor_telegram_id"])
-    op.create_table("challenge_drafts",
+    op.create_table(
+        "challenge_drafts",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("challenge_id", sa.String(128), nullable=False),
         sa.Column("version", sa.String(32), nullable=False),
@@ -75,7 +87,9 @@ def upgrade():
     )
     op.create_index("ix_challenge_drafts_challenge_id", "challenge_drafts", ["challenge_id"])
     op.create_index("ix_challenge_drafts_status", "challenge_drafts", ["status"])
-    op.create_index("ix_challenge_drafts_author_telegram_id", "challenge_drafts", ["author_telegram_id"])
+    op.create_index(
+        "ix_challenge_drafts_author_telegram_id", "challenge_drafts", ["author_telegram_id"]
+    )
 
 
 def downgrade():

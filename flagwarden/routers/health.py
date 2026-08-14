@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from starlette.responses import Response
 
 from ..db import get_db

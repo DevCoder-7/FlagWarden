@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -13,7 +14,7 @@ os.environ["REVIEWER_TELEGRAM_IDS"] = "10002"
 os.environ["AUTHOR_TELEGRAM_IDS"] = "10003"
 
 from flagwarden.config import get_settings
-from flagwarden.db import Base, get_engine, init_db
+from flagwarden.db import Base, get_engine
 from flagwarden.main import app
 
 

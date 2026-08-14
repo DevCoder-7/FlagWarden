@@ -1,4 +1,3 @@
-
 def h(user_id):
     return {"X-Debug-Telegram-Id": str(user_id)}
 
@@ -19,12 +18,19 @@ def challenge_payload():
         "hints": [{"cost": 10, "text": "Check the state machine."}],
         "verifier": {"type": "quiz_choice", "choices": ["yes", "no"], "correct_index": 0},
         "safety": {"scope": "concept_only", "notes": "test"},
-        "debrief": {"concept": "RBAC", "why_it_works": "Separation of duties reduces unilateral publication risk.", "remediation": "Use explicit role gates.", "references": []},
+        "debrief": {
+            "concept": "RBAC",
+            "why_it_works": "Separation of duties reduces unilateral publication risk.",
+            "remediation": "Use explicit role gates.",
+            "references": [],
+        },
     }
 
 
 def test_author_reviewer_admin_workflow(client):
-    created = client.post("/api/admin/drafts", headers=h(10003), json={"challenge": challenge_payload()})
+    created = client.post(
+        "/api/admin/drafts", headers=h(10003), json={"challenge": challenge_payload()}
+    )
     assert created.status_code == 200
     draft_id = created.json()["id"]
     assert created.json()["status"] == "DRAFT"

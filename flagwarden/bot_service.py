@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import random
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -112,7 +113,7 @@ def submit_answer(db: Session, user: User, submitted: str) -> str:
         awarded = score_for_solve(challenge, progress.hints_used)
         progress.solved = True
         progress.score_awarded = awarded
-        progress.solved_at = datetime.now(timezone.utc)
+        progress.solved_at = datetime.now(UTC)
         user.total_score += awarded
         user.active_challenge_id = None
         update_streak(user)

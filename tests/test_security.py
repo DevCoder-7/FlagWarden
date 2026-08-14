@@ -1,6 +1,9 @@
-from datetime import datetime, timezone
-import hashlib, hmac, json
+import hashlib
+import hmac
+import json
+from datetime import UTC, datetime
 from urllib.parse import urlencode
+
 import pytest
 
 from flagwarden.security import (
@@ -15,9 +18,11 @@ from flagwarden.security import (
 
 def make_init_data(bot_token: str, user_id: int = 42):
     fields = {
-        "auth_date": str(int(datetime.now(timezone.utc).timestamp())),
+        "auth_date": str(int(datetime.now(UTC).timestamp())),
         "query_id": "AAEAAAE",
-        "user": json.dumps({"id": user_id, "first_name": "Test", "username": "tester"}, separators=(",", ":")),
+        "user": json.dumps(
+            {"id": user_id, "first_name": "Test", "username": "tester"}, separators=(",", ":")
+        ),
     }
     check = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
     secret = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -37,16 +38,18 @@ def list_challenges(user: User = Depends(current_user), db: Session = Depends(ge
     solved = solved_ids(db, user.id)
     out = []
     for c in all_challenges(db).values():
-        out.append({
-            "id": c.id,
-            "title": c.title,
-            "category": c.category,
-            "difficulty": c.difficulty,
-            "points": c.points,
-            "skills": c.skills,
-            "solved": c.id in solved,
-            "learning_objectives": c.learning_objectives,
-        })
+        out.append(
+            {
+                "id": c.id,
+                "title": c.title,
+                "category": c.category,
+                "difficulty": c.difficulty,
+                "points": c.points,
+                "skills": c.skills,
+                "solved": c.id in solved,
+                "learning_objectives": c.learning_objectives,
+            }
+        )
     return sorted(out, key=lambda x: x["id"])
 
 
@@ -114,7 +117,9 @@ def submit_draft(
 ):
     row = _draft_or_404(db, draft_id)
     if row.author_telegram_id != user.telegram_user_id and user.role != Role.ADMIN.value:
-        raise HTTPException(status_code=403, detail="only the author or admin can submit this draft")
+        raise HTTPException(
+            status_code=403, detail="only the author or admin can submit this draft"
+        )
     if row.status != DraftStatus.DRAFT.value:
         raise HTTPException(status_code=409, detail="draft is not in DRAFT state")
     Challenge.model_validate(json.loads(row.content_json))

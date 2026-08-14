@@ -1,5 +1,5 @@
 from .challenges import Challenge
-from .security import dynamic_flag, verify_digest, normalize_answer
+from .security import dynamic_flag, normalize_answer, verify_digest
 
 
 def verify_submission(challenge: Challenge, submitted: str, user_id: int, pepper: str) -> bool:

@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -8,13 +9,13 @@ from .repository import all_challenges
 
 
 def update_streak(user: User) -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     if user.last_solved_at is None:
         user.streak = 1
     else:
         previous = user.last_solved_at
         if previous.tzinfo is None:
-            previous = previous.replace(tzinfo=timezone.utc)
+            previous = previous.replace(tzinfo=UTC)
         delta = now.date() - previous.date()
         if delta.days == 0:
             pass
@@ -26,7 +27,11 @@ def update_streak(user: User) -> None:
 
 
 def solved_ids(db: Session, user_id: int) -> set[str]:
-    rows = db.scalars(select(ChallengeProgress).where(ChallengeProgress.user_id == user_id, ChallengeProgress.solved.is_(True))).all()
+    rows = db.scalars(
+        select(ChallengeProgress).where(
+            ChallengeProgress.user_id == user_id, ChallengeProgress.solved.is_(True)
+        )
+    ).all()
     return {r.challenge_id for r in rows}
 
 

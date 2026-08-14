@@ -1,7 +1,7 @@
+import time
 from collections import defaultdict, deque
 from functools import lru_cache
 from threading import Lock
-import time
 
 from .config import get_settings
 

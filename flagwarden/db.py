@@ -1,4 +1,5 @@
 from functools import lru_cache
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -36,6 +37,7 @@ def get_db():
 
 def init_db() -> None:
     from . import models  # noqa: F401
+
     Base.metadata.create_all(get_engine())
 
 

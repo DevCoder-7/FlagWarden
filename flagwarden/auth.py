@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from fastapi import Depends, Header, HTTPException
 from sqlalchemy.orm import Session
 
@@ -42,4 +43,5 @@ def require_role(min_role: Role):
         if ROLE_RANK.get(user.role, 0) < ROLE_RANK[min_role.value]:
             raise HTTPException(status_code=403, detail=f"Requires role {min_role.value} or higher")
         return user
+
     return dependency
