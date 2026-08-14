@@ -41,7 +41,6 @@ line-length = 120
 [tool.ruff.lint]
 # Abaikan error E402 (import order)
 ignore = ["E402"]
-select = ["E", "F", "I", "B", "UP"]
 
 [tool.mypy]
 python_version = "3.11"
